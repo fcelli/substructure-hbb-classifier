@@ -18,19 +18,33 @@ def root_to_pandas(
         df = f[tree_name].arrays(columns, library='pd')
     return df
 
-def train_test_split(
+def train_test_sample(
     df: pandas.DataFrame,
-    frac_train: float = 0.5
+    n_samples: int,
+    frac_train: float = 0.5,
+    weight_name: str = 'w',
+    random_state: int = None
 ) -> tuple[pandas.DataFrame, pandas.DataFrame]:
     '''
-    Split a pandas DataFrame into train and test samples.
+    Split and sample a pandas DataFrame into train and test datasets.
     
     Arguments:
     df (pandas.DataFrame): input dataframe.
+    n_samples (int): total number of events to be sampled.
     frac_train (float): fractional size of train sample.
+    weight_name (str): name of the weight to be used during sampling.
     '''
-    df_train = df.sample(frac=frac_train)
+    # Split train and test datasets
+    df_train = df.sample(frac=frac_train, replace=False, random_state=random_state)
     df_test = df.drop(df_train.index)
     df_train.reset_index(drop=True, inplace=True)
     df_test.reset_index(drop=True, inplace=True)
+    # Sample train and test datasets according to weight
+    n_train = int(n_samples*frac_train)
+    n_test = int(n_samples*(1-frac_train))
+    df_train = df_train.sample(n=n_train, replace=True, weights=df_train.loc[:, weight_name], random_state=random_state)
+    df_test = df_test.sample(n=n_test, replace=True, weights=df_test.loc[:, weight_name], random_state=random_state)
+    # Remove weight column as no longer needed
+    df_train.drop(['w'], axis=1, inplace=True)
+    df_test.drop(['w'], axis=1, inplace=True)
     return df_train, df_test
