@@ -4,4 +4,4 @@ uproot==5.0.4
 matplotlib==3.7.1
 notebook==6.5.3
 tensorflow==2.11.0
-scikit-learn==1.2.1
+keras-tuner==1.1.3
