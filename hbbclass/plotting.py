@@ -14,7 +14,7 @@ def compare_feature(
 ) -> None:
     '''
     Compare the signal and background distributions of a feature.
-    
+
     Arguments:
     - df (pandas.DataFrame): input dataframe containing the data to be plotted.
     - feature_name (str): name of the feature to be plotted
@@ -25,7 +25,7 @@ def compare_feature(
         df = df.loc[(df[feature_name] >= limits[0]) & (df[feature_name] <= limits[1])]
     df_sig = df.loc[df['is_signal'] == 1]
     df_bkg = df.loc[df['is_signal'] == 0]
-    if ax == None:
+    if ax is None:
         _, ax = plt.subplots()
     ax.hist(df_sig[feature_name], range=limits, bins=bins, color='red', label='Signal', alpha=0.5)
     ax.hist(df_bkg[feature_name], range=limits, bins=bins, color='blue', label='Background', alpha=0.5)

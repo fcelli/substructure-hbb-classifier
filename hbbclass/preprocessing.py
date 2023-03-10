@@ -1,6 +1,7 @@
 import pandas
 import uproot
 
+
 def root_to_pandas(
     file_name: str,
     columns: list[str],
@@ -18,6 +19,7 @@ def root_to_pandas(
         df = f[tree_name].arrays(columns, library='pd')
     return df
 
+
 def train_test_sample(
     df: pandas.DataFrame,
     n_samples: int,
@@ -27,7 +29,7 @@ def train_test_sample(
 ) -> tuple[pandas.DataFrame, pandas.DataFrame]:
     '''
     Split and sample a pandas DataFrame into train and test datasets.
-    
+
     Arguments:
     df (pandas.DataFrame): input dataframe.
     n_samples (int): total number of events to be sampled.
